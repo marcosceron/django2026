@@ -1,6 +1,13 @@
-<h1>{{ pergunta.texto_pergunta }}</h1>
-<ul>
-{% for alternativa in pergunta.alternativa_set.all %}
-    <li>{{ alternativa.texto_alternativa }}</li>
-{% endfor %}
-</ul>
+<form action="{% url 'polls:votar' pergunta.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ pergunta.texto_pergunta }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% for alternativa in pergunta.alternativa_set.all %}
+        <input type="radio" name="alternativa" id="{{ forloop.counter }}" value="{{ alternativa.id }}">
+        <label for="alternativa{{ forloop.counter }}">{{ alternativa.texto_alternativa }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Votar">
+</form>
+
